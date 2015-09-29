@@ -1,0 +1,14 @@
+{
+  "name": "gastropod-task-webpack",
+  "version": "0.0.1",
+  "description": "gastropod addon",
+  "main": "index.js",
+  "config": {
+  	"type": "task"
+  	},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
