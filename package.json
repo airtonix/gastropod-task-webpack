@@ -13,7 +13,11 @@
     "type": "task"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "merge-to-master": "git checkout master && git merge develop",
+    "merge-to-develop": "git checkout develop && git merge master",
+    "push": "git push --all && git push --tags",
+    "preversion": "npm run merge-to-master",
+    "postversion": "npm run merge-to-develop && npm run push"
   },
   "author": "",
   "license": "ISC",
