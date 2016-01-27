@@ -9,7 +9,22 @@ var path = require('path');
  */
 var webpack = require('webpack-stream'),
 	debug = require('debug')('gastropod/addons/tasks/webpack'),
+	accept = require('check-args'),
+	// logging = require('gastropod').Logging
 	named = require('vinyl-named');
+
+
+var buildPath = accept(String, String, String)
+				.to(function(root, staticRoot, section){
+					return path.join(root,
+									 staticRoot,
+									 section);
+				});
+
+/**
+  * Project
+  */
+var DEFAULT_CONFIG = {};
 
 
 /**
@@ -19,16 +34,18 @@ module.exports = function (gulp, gastro){
 	/**
 	 * Constants
 	 */
-	var Config = gastro.Config;
+	var Config = gastro.Config,
+		// logger = new logging.Logger('css:scss'),
 
-	// var logger = new Logger('scripts:browserify'),
-	var source = path.join(Config.source.root,
+		source = buildPath(Config.source.root,
 						   Config.source.scripts,
 						   Config.filters.scripts.modules),
-		target = path.join(Config.target.root,
+
+		target = buildPath(Config.target.root,
 						   Config.target.static,
 						   Config.target.scripts),
-		WebpackConfig = Config.plugins.js.webpack;
+
+		WebpackConfig = Config.plugins.js.webpack || DEFAULT_CONFIG;
 
 	gulp.task('webpack', function(done){
 
@@ -38,7 +55,10 @@ module.exports = function (gulp, gastro){
 
 		return gulp.src(source)
 			.pipe(named())
+			// .pipe(logger.incoming())
+			// .pipe(plumber(logging.ErrorHandler('JS:Webpack')))
 			.pipe(webpack(WebpackConfig))
+			// .pipe(logger.outgoing())
 			.pipe(gulp.dest(target));
 
 	});
