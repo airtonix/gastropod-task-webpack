@@ -15,8 +15,9 @@
   "scripts": {
     "merge-to-master": "git checkout master && git merge develop",
     "merge-to-develop": "git checkout develop && git merge master",
+    "recreate-shrinkwrap": "rm shrinkwrap.json && npm run shrinkwrap && git commit -am 'preversion: recreate shrinkwrap' ",
     "push": "git push --all && git push --tags",
-    "preversion": "npm run merge-to-master",
+    "preversion": "npm run merge-to-master && npm run recreate-shrinkwrap",
     "postversion": "npm run merge-to-develop && npm run push"
   },
   "author": "",
@@ -26,6 +27,7 @@
     "coffee-script": "^1.10.0",
     "debug": "^2.2.0",
     "gulp": "^3.9.0",
+    "gulp-plumber": "^1.0.1",
     "vinyl-named": "^1.1.0",
     "webpack": "^1.12.4",
     "webpack-stream": "^2.1.1"
