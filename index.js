@@ -7,12 +7,18 @@ var path = require('path');
 /**
  * Framework
  */
-var webpack = require('webpack-stream'),
+var gulp = require('gulp'),
+	webpack = require('webpack-stream'),
 	debug = require('debug')('gastropod/addons/tasks/webpack'),
 	named = require('vinyl-named'),
 	accept = require('check-args'),
 	plumber = require('gulp-plumber');
 
+var Logging = require('gastropod').Logging,
+	Config = require('gastropod/src/config'),
+	Manifest = require('gastropod/src/core/manifest'),
+	logger = new Logging.Logger('Webpack'),
+	ErrorHandler = new Logging.ErrorHandler('Webpack');
 
 var buildPath = accept(String, String, String)
 				.to(function(root, staticRoot, section){
@@ -30,21 +36,19 @@ var DEFAULT_CONFIG = {};
 /**
  * Exportable
  */
-module.exports = function (gulp, gastro){
+module.exports = function () {
 	/**
 	 * Constants
 	 */
-	var Config = gastro.Config,
+	var source = buildPath(Config.Store.source.root,
+						   Config.Store.source.scripts,
+						   Config.Store.filters.scripts.modules),
 
-		source = buildPath(Config.source.root,
-						   Config.source.scripts,
-						   Config.filters.scripts.modules),
+		target = buildPath(Config.Store.target.root,
+						   Config.Store.target.static,
+						   Config.Store.target.scripts),
 
-		target = buildPath(Config.target.root,
-						   Config.target.static,
-						   Config.target.scripts),
-
-		WebpackConfig = Config.plugins.js.webpack || DEFAULT_CONFIG;
+		WebpackConfig = Config.Store.plugins.js.webpack || DEFAULT_CONFIG;
 
 	gulp.task('webpack', function(done){
 
@@ -53,10 +57,12 @@ module.exports = function (gulp, gastro){
 		debug(' > target', target);
 
 		return gulp.src(source)
+			.pipe(logger.incoming())
+			.pipe(plumber(ErrorHandler))
 			.pipe(named())
 			.pipe(webpack(WebpackConfig))
-			.on('error', function handleError(err){ this.emit('end'); })
 			.pipe(gulp.dest(target))
+			.pipe(logger.outgoing())
 
 	});
 
