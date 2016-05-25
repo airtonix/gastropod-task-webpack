@@ -23,6 +23,9 @@
   },
   "author": "",
   "license": "ISC",
+  "peerDependencies": {
+    "gastropod": "^1.2.1"
+  },
   "dependencies": {
     "gulp": "^3.9.0",
     "check-args": "0.0.6",
