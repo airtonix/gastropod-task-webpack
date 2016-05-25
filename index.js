@@ -7,8 +7,7 @@ var path = require('path');
 /**
  * Framework
  */
-var gulp = require('gulp'),
-	webpack = require('webpack-stream'),
+var webpack = require('webpack-stream'),
 	debug = require('debug')('gastropod/addons/tasks/webpack'),
 	named = require('vinyl-named'),
 	accept = require('check-args'),
@@ -36,7 +35,7 @@ var DEFAULT_CONFIG = {};
 /**
  * Exportable
  */
-module.exports = function () {
+module.exports = function (gulp) {
 	/**
 	 * Constants
 	 */
