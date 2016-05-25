@@ -15,7 +15,7 @@ var webpack = require('webpack-stream'),
 
 var Logging = require('gastropod').Logging,
 	Config = require('gastropod/src/config'),
-	Manifest = require('gastropod/src/core/manifest'),
+	Manifest = require('gastropod/src/core/assets/manifest'),
 	logger = new Logging.Logger('Webpack'),
 	ErrorHandler = new Logging.ErrorHandler('Webpack');
 
